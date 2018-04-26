@@ -8,24 +8,24 @@ require 'bcrypt'
 # end
 
 # 10.times do |e|
-# 	Post.create(title: Faker::VForVendetta.quote, body: Faker::VForVendetta.speech, author_id: User.find(1).id)
+# 	Post.create(title: Faker::VForVendetta.quote, body: Faker::VForVendetta.speech, author: User.find(1))
 # end 
 
 # 5.times do |e|
 # 	Post.all.each do |post|
-# 		post.comments.create(content: Faker::Seinfeld.quote, author_id: User.find(rand(2..11)).id)
+# 		post.comments.create(content: Faker::Seinfeld.quote, author: User.find(rand(2..11)))
 # 	end 
 # end
 
 # Comment.all.each do |comment|
-# 	comment.comments.create(content: Faker::Seinfeld.quote, author_id: User.find(rand(1..11)).id)
+# 	comment.comments.create(content: Faker::Seinfeld.quote, author: User.find(rand(1..11)))
 # end 
 
-20.times do |e|
-	Post.all.each do |post|
-		post.likes.create(user_id: User.find(rand(1..11)).id)
-	end
-	Comment.all.each do |post|
-		post.likes.create(user_id: User.find(rand(1..11)).id)
-	end
-end
+# 20.times do |e|
+# 	Post.all.each do |post|
+# 		post.likes.create(user_id: User.find(rand(1..11)).id)
+# 	end
+# 	Comment.all.each do |post|
+# 		post.likes.create(user_id: User.find(rand(1..11)).id)
+# 	end
+# end

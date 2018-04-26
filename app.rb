@@ -15,3 +15,8 @@ configure do
 end
 
 set :database, {adapter: 'postgresql', database: 'blog'}
+
+get '/' do 
+  @admin = User.where(admin: true).first
+  erb :index
+end 
