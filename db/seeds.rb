@@ -21,11 +21,11 @@ require 'bcrypt'
 # 	comment.comments.create(content: Faker::Seinfeld.quote, author_id: User.find(rand(1..11)).id)
 # end 
 
-# 20.times do |e|
-# 	Post.all.each do |post|
-# 		post.likes.create(user_id: User.find(rand(1..11)).id)
-# 	end
-# 	Comment.all.each do |post|
-# 		post.likes.create(user_id: User.find(rand(1..11)).id)
-# 	end
-# end
+20.times do |e|
+	Post.all.each do |post|
+		post.likes.create(user_id: User.find(rand(1..11)).id)
+	end
+	Comment.all.each do |post|
+		post.likes.create(user_id: User.find(rand(1..11)).id)
+	end
+end
