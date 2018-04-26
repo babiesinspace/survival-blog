@@ -8,4 +8,9 @@ require_relative './models/comment'
 require_relative './models/tag'
 require_relative './models/taggedpost'
 
+configure do
+    enable :sessions unless test?
+    set :session_secret, "secret"
+end
+
 set :database, {adapter: 'postgresql', database: 'blog'}
