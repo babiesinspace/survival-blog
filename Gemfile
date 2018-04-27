@@ -7,3 +7,4 @@ gem "pg"
 gem 'shotgun'
 gem 'bcrypt'
 gem 'faker'
+gem 'closure_tree'

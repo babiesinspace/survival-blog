@@ -21,6 +21,7 @@ require 'bcrypt'
 # 	comment.comments.create(content: Faker::Seinfeld.quote, author: User.find(rand(1..11)))
 # end 
 
+#REWRITE TO CREATE RANDOM NUMBER OF LIKES
 # 20.times do |e|
 # 	Post.all.each do |post|
 # 		post.likes.create(user_id: User.find(rand(1..11)).id)
@@ -29,3 +30,4 @@ require 'bcrypt'
 # 		post.likes.create(user_id: User.find(rand(1..11)).id)
 # 	end
 # end
+
