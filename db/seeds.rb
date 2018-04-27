@@ -31,3 +31,10 @@ require 'bcrypt'
 # 	end
 # end
 
+#REWRITE TO CREATE RANDOM NUMBER OF TAGS
+# tags = ["Nutrition", "Wellness", "Time Management", "Fitness", "Learn", "Socialize"]
+# tags.each do |topic|
+#   tag = Tag.create(name: topic)
+#   tag.posts << Post.find(rand(1..10))
+# end
+

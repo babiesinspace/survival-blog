@@ -1,0 +1,40 @@
+<div class="container">
+  <blockquote>
+    <h1><%= @post.title %></h1>
+    <p><%= @post.body %></p>
+  </blockquote>
+
+  <% if @user && @post.author == @user %>
+    <form action="/posts/<%=@post.id%>/edit" method="POST">
+      <input type="hidden" name="_method" value="PUT">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="title">Title</label>
+          <input class="form-control" type="text" name="title" placeholder="<%= @post.title%>"></input>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="body">Body</label>
+          <textarea class="form-control" name="body" rows="10" placeholder="<%= @post.body%>"></textarea>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+
+    <form action="/posts/<%= @post.id %>" method="POST">
+      <input type="hidden" name="_method" value="DELETE">
+      <button type="submit">Delete</button>
+    </form>
+  <% else %>
+    <form action="/posts/<%=@post.id%>/comments/new" method="POST">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="content">Add Comment:</label>
+          <textarea class="form-control" name="content" rows="3" ></textarea>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Add</button>
+    </form>
+  <% end %>
+</div>

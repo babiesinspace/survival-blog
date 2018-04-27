@@ -18,7 +18,13 @@ set :database, {adapter: 'postgresql', database: 'blog'}
 
 get '/' do 
   @admin = User.where(admin: true).first
+  @posts = Post.limit(5)
   erb :index
+end 
+
+get '/logout' do 
+  session.clear
+  redirect '/'
 end 
 
 get '/users/login' do 
@@ -71,12 +77,40 @@ get '/users/:id' do
 end 
 
 get '/comments' do 
-  @comments = Comment.limit(20)
+  @comments = Comment.order("updated_at").last(20).reverse
   erb :'comments/index'
 end 
 
-get '/comments/:id' do 
-  @user = User.find(session[:id])
+post '/comments/:id/like' do 
   @comment = Comment.find(params[:id])
-  erb :'comments/show'
-end 
+  if session[:id] 
+    @user = User.find(session[:id])
+    @comment.likes.create(user: @user)
+  else 
+    @comment.likes.create
+  end
+  redirect "/comments"
+end
+
+post '/comments/:id/new' do 
+  @commentable = Comment.find(params[:id])
+  @comment = @commentable.comments.new(content: params[:content])
+  if @comment.save
+    @msg = "Saved"
+    redirect "/comments"
+  else
+    @errors = @comment.errors
+    redirect "/comments"
+  end
+end  
+
+get '/posts/:id' do 
+  @user = User.find(session[:id])
+  @post = Post.find(params[:id])
+  erb :'posts/show'
+end
+
+get '/tags' do 
+  @tags = Tag.all
+  erb :'tags/index'
+end  
