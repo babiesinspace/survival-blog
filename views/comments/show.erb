@@ -1,0 +1,28 @@
+<div class="container">
+  <blockquote>
+    <p><%= @comment.content %></p>
+  </blockquote>
+
+  <% if @user && @comment.author == @user %>
+    <form action="/comment/<%=@comment.id%>/edit" method="POST">
+      <input type="hidden" name="_method" value="PUT">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="exampleFormControlTextarea1">You Wrote:</label>
+          <textarea class="form-control" name="content" rows="3" placeholder="<%= @comment.content%>"></textarea>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+  <% else %>
+    <form action="/comment/<%=@comment.id%>/new" method="POST">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="exampleFormControlTextarea1">Add Comment:</label>
+          <textarea class="form-control" name="content" rows="3" ></textarea>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Add</button>
+    </form>
+  <% end %>
+</div>

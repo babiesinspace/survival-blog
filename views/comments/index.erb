@@ -1,0 +1,9 @@
+<h1>What People are saying</h1>
+
+<% @comments.each do |comment| %>
+
+  <h3><%= comment.content %></h3>
+
+  <p>LIKES <%= comment.likes.count %></p>
+  
+<% end %>

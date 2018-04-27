@@ -49,7 +49,7 @@ post '/login' do
 
   if @user.authenticate(params[:password])
     session[:id] = @user.id
-    redirect "/user/profile"
+    redirect "/users/profile"
   else
     # check this
     @errors = @user.errors
@@ -70,3 +70,13 @@ get '/users/:id' do
   erb :'users/show'
 end 
 
+get '/comments' do 
+  @comments = Comment.limit(20)
+  erb :'comments/index'
+end 
+
+get '/comments/:id' do 
+  @user = User.find(session[:id])
+  @comment = Comment.find(params[:id])
+  erb :'comments/show'
+end 
