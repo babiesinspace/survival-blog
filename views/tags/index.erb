@@ -1,0 +1,7 @@
+<div class="list-group">
+  <% @tags.each do |tag| %>
+    <a href="/tags/<%= tag.id%>" class="list-group-item list-group-item-action">
+      <%= tag.name %> <span class="badge badge-primary badge-pill"><%= tag.posts.count %></span>
+    </a>
+  <% end %>
+</div>

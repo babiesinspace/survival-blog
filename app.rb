@@ -40,7 +40,7 @@ post '/register' do
 
   if @user.save
     session[:id] = @user.id
-    redirect "/user/profile"
+    redirect "/users/profile"
   else
     # check this
     @errors = @user.errors
@@ -66,9 +66,35 @@ end
 
 # see your recent comments/likes
 get '/users/profile' do
-  @user = User.find(session[:id]) 
+  @user = User.find(session[:id]) if session[:id] 
   erb :profile
 end 
+
+get '/users/profile/edit' do 
+  @user = User.find(session[:id]) if session[:id]
+  if @user 
+    erb :'/users/edit'
+  else 
+    redirect ("/")
+  end  
+end
+
+put '/users/profile' do 
+  @user = User.find(session[:id]) if session[:id]
+  if @user 
+    @user.update(name: params[:name], email: params[:email], handle: params[:handle], password: params[:password])
+  else 
+    @errors = @user.errors
+  end 
+  redirect ("/users/profile")
+end 
+
+delete '/users/profile' do 
+  @user = User.find(session[:id]) if session[:id]
+  @user.destroy
+  session.clear
+  redirect ("/")
+end
 
 # see someone else's recent comments/likes
 get '/users/:id' do 
@@ -76,7 +102,8 @@ get '/users/:id' do
   erb :'users/show'
 end 
 
-get '/comments' do 
+get '/comments' do
+  @user = User.find(session[:id]) if session[:id]
   @comments = Comment.order("updated_at").last(20).reverse
   erb :'comments/index'
 end 
@@ -92,25 +119,94 @@ post '/comments/:id/like' do
   redirect "/comments"
 end
 
-post '/comments/:id/new' do 
-  @commentable = Comment.find(params[:id])
-  @comment = @commentable.comments.new(content: params[:content])
+post '/comments/:id/new' do
+  @user = User.find(session[:id]) if session[:id] 
+  if @user 
+    @commentable = Comment.find(params[:id])
+    @comment = @commentable.comments.new(content: params[:content], author: @user)
+  end 
   if @comment.save
     @msg = "Saved"
-    redirect "/comments"
   else
     @errors = @comment.errors
-    redirect "/comments"
   end
+  redirect "/comments"
+end
+
+put '/comments/:id/edit' do 
+  @user = User.find(session[:id]) if session[:id]
+  @comment = Comment.find(params[:id])
+  if @comment.author == @user 
+    @comment.update(content: params[:content])
+  end 
+  redirect ("/posts/#{params[:post]}") if !params[:post].nil?
+  redirect ("/comments") if !params[:comments].nil?
+  redirect ("/")
+end
+
+delete '/comments/:id' do 
+  @user = User.find(session[:id]) if session[:id]
+  @comment = Comment.find(params[:id])
+  if @comment.author == @user 
+    @comment.destroy
+  end
+  redirect ("/posts/#{params[:post]}") if !params[:post].nil?
+  redirect ("/comments") if !params[:comments].nil? 
+  redirect ("/")
 end  
 
 get '/posts/:id' do 
-  @user = User.find(session[:id])
+  @user = User.find(session[:id]) if session[:id]
   @post = Post.find(params[:id])
   erb :'posts/show'
+end
+
+post '/posts/:id/like' do 
+  @post = Post.find(params[:id])
+  if session[:id] 
+    @user = User.find(session[:id])
+    @post.likes.create(user: @user)
+  else 
+    @post.likes.create
+  end
+  redirect '/' if params[:home] == "home"
+  redirect ("/posts/#{params[:id]}")
+end
+
+post '/posts/:id/comments/new' do
+  @user = User.find(session[:id]) if session[:id]
+  if @user 
+    @commentable = Post.find(params[:id])
+    @comment = @commentable.comments.new(content: params[:content], author: @user)
+    if @comment.save
+      @msg = "Saved"
+    else
+      @errors = @comment.errors
+    end
+  else 
+    @msg = "You must be logged in to leave a comment!"
+  end 
+  redirect "/posts/#{params[:id]}"
+end
+
+post "/posts/:id/comments/:comment_id/like" do
+  @comment = Comment.find(params[:likable_id])
+  if session[:id] 
+    @user = User.find(session[:id])
+    @comment.likes.create(user: @user)
+  else 
+    @comment.likes.create
+  end
+  redirect '/' if params[:home] == "home"
+  redirect back
 end
 
 get '/tags' do 
   @tags = Tag.all
   erb :'tags/index'
+end
+
+get '/tags/:id' do 
+  @tag = Tag.find(params[:id])
+  erb :'tags/show'
 end  

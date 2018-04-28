@@ -4,13 +4,13 @@
 
   <h3><%= comment.content %></h3>
 
-  <p>LIKES <%= comment.likes.count %></p>
   <form action="/comments/<%= comment.id %>/like" method="POST">
     <button type="submit">Like</button>
   </form>
-  <% if @user && comment.author == @user %>
+  <% if comment.author == @user %>
     <form action="/comments/<%=comment.id%>/edit" method="POST">
       <input type="hidden" name="_method" value="PUT">
+      <input type="hidden" name="comments" value="comments">
       <div class="form-row">
         <div class="form-group">
           <label for="exampleFormControlTextarea1">You Wrote:</label>
@@ -22,6 +22,7 @@
 
     <form action="/comments/<%= comment.id %>" method="POST">
       <input type="hidden" name="_method" value="DELETE">
+      <input type="hidden" name="comments" value="comments">
       <button type="submit">Delete</button>
     </form>
   <% else %>
