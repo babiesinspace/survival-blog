@@ -1,0 +1,37 @@
+<div class="container">
+  <blockquote>
+    <h1><%= @post.title %></h1>
+    <p><%= @post.body %></p>
+  </blockquote>
+  <form action="/posts/<%= @post.id %>/like" method="POST">
+    <span class="badge badge-primary badge-pill"><%= @post.likes.count %>  </span>  <button type="submit">Like</button>
+  </form>
+
+  <% if @user && @post.author == @user %>
+    <form action="/posts/<%=@post.id%>/edit" method="POST">
+      <input type="hidden" name="_method" value="PUT">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="title">Title</label>
+          <input class="form-control" type="text" name="title" placeholder="<%= @post.title%>"></input>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="body">Body</label>
+          <textarea class="form-control" name="body" rows="10" placeholder="<%= @post.body%>"></textarea>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+
+    <form action="/posts/<%= @post.id %>" method="POST">
+      <input type="hidden" name="_method" value="DELETE">
+      <button type="submit">Delete</button>
+    </form>
+  <% end %>
+  <%= partial(:comment, :collection => @post.comments) %>
+  <% if !@user %>
+    <p><em>Sign in or register to leave a comment!</em></p>
+  <% end %>
+</div>

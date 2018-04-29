@@ -1,0 +1,26 @@
+<div class="container">
+  <h1><%= @user.handle %>'s Page</h1>
+
+  <% @user.comments.each do |comment| %>
+
+    <% if comment.commentable_type ==  "Post" %>
+      <div class="well">
+        <h3><%= comment.commentable.title %></h3>
+        <p class="text-muted">Added on <%= comment.commentable.created_at %></p>
+      </div>
+    <% else %>
+      <div class="well">
+        <h3><%= comment.commentable.content %></h3>
+        <p class="text-muted"><strong><%= comment.commentable.author.handle %> commented</strong> on <%= comment.commentable.created_at %></p>
+
+        <blockquote>
+          <p><em><%= comment.commentable.content %></em></p>
+        </blockquote>
+      </div>
+    <% end %>
+      <blockquote>
+        <p>To which you replied..</p>
+        <p><%= comment.content %></p>
+      </blockquote>
+    <% end %>
+</div>
