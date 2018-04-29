@@ -19,6 +19,7 @@ end
 set :database, {adapter: 'postgresql', database: 'survival'}
 
 get '/' do 
+  @user = User.find(session[:id]) if session[:id]
   @admin = User.where(admin: true).first
   @posts = Post.limit(5)
   erb :index
@@ -106,7 +107,7 @@ end
 
 get '/comments' do
   @user = User.find(session[:id]) if session[:id]
-  @comments = Comment.hash_tree(limit_depth: 20)
+  @comments = Comment.order(updated_at: :asc).reverse_order.limit(10).reverse
   erb :'comments/index'
 end 
 
@@ -131,12 +132,12 @@ end
 post '/comments/:id/new' do
   @user = User.find(session[:id]) if session[:id] 
   if @user 
-    if params[:comment_id] 
-      @commentable = Comment.find(params[:comment_id])
-      @comment = @commentable.children.new(content: params[:content], author: @user)
-    elsif params[:post_id]
-      @commentable = Post.find(params[:post_id])
-      @comment = @commentable.children.new(content: params[:content], author: @user)
+    @ancestor = Post.find(params[:post])
+    if params[:parent]
+      @commentable = Comment.find(params[:parent]) 
+      @comment = @commentable.replies.new(ancestor: @ancestor, content: params[:content], author: @user)
+    else
+      @comment = @ancestor.comments.new(ancestor: @ancestor, content: params[:content], author: @user)
     end
   end 
   if @comment.save
@@ -144,7 +145,7 @@ post '/comments/:id/new' do
   else
     @errors = @comment.errors
   end
-  redirect "/comments"
+  redirect ("/posts/#{@ancestor.id}")
 end
 
 put '/comments/:id/edit' do 
@@ -171,7 +172,8 @@ end
 
 get '/posts/:id' do 
   @user = User.find(session[:id]) if session[:id]
-  @post = Post.find(params[:id])
+  params[:id] ? id = params[:id] : id = params[:post]
+  @post = Post.find(id)
   erb :'posts/show'
 end
 

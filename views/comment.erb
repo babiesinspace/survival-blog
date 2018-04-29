@@ -6,14 +6,47 @@
     </div>
     <p class="mb-1"><%= comment.content %></p>
     <small class="text-muted">
-    <form action="/posts/<%= comment.ancestor.id %>/comments/<%= comment.id %>/like" method="POST">
-      <input type="hidden" name="home" value="home">
-      <input type="hidden" name="likable_id" value=<%= comment.id %>>
-      <span class="badge badge-primary badge-pill"><%= comment.likes.count %>  </span>  <button type="submit">Like</button>
-    </form>
+      <form action="/posts/<%= comment.ancestor.id %>/comments/<%= comment.id %>/like" method="POST">
+        <input type="hidden" name="home" value="home">
+        <input type="hidden" name="likable_id" value=<%= comment.id %>>
+        <span class="badge badge-primary badge-pill"><%= comment.likes.count %>  </span>  <button type="submit">Like</button>
+      </form>
     </small>  
   </a>
+  <% if @user && comment.author == @user %>
+    <form action="/comments/<%=comment.id%>/edit" method="POST">
+      <input type="hidden" name="_method" value="PUT">
+      <input type="hidden" name="post" value="<%= comment.ancestor.id %>">
+      <% if comment.parent %>
+        <input type="hidden" name="parent" value="<%= comment.parent.id %>">
+      <% end %>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="exampleFormControlTextarea1">You Wrote:</label>
+          <textarea class="form-control" name="content" rows="3" placeholder="<%= comment.content%>"></textarea>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+    <form action="/comments/<%= comment.id %>" method="POST">
+      <input type="hidden" name="_method" value="DELETE">
+      <input type="hidden" name="post" value="<%= comment.ancestor.id %>">
+      <button type="submit">Delete</button>
+    </form>
+  <% elsif @user %>
+    <form action="/comments/<%=comment.id%>/new" method="POST">
+      <input type="hidden" name="post" value="<%= comment.ancestor.id %>">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="exampleFormControlTextarea1">Add Comment:</label>
+          <textarea class="form-control" name="content" rows="3" ></textarea>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Add</button>
+    </form>
+  <% end %>  
   <% if comment.replies.any? %>
     <%= partial(:comment, :collection => comment.replies) %>
   <% end %>
 </div>
+
