@@ -3,8 +3,8 @@ class CreateComments < ActiveRecord::Migration[5.2]
   	create_table :comments do |t|
   		t.text :content, null: false
   		t.references :user
-  		t.references :commentable, polymorphic: true
-  		
+  		t.references :post
+      t.integer :parent_id
   		t.timestamps
   	end 
   end

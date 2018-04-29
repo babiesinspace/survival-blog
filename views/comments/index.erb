@@ -4,16 +4,18 @@
 
   <h3><%= comment.content %></h3>
 
-  <form action="/comments/<%= comment.id %>/like" method="POST">
-    <button type="submit">Like</button>
-  </form>
+
+    <form action="/comments/<%= comment.id %>/like" method="POST">
+      <span class="badge badge-primary badge-pill"><%= comment.likes.count %>  </span>  <button type="submit">Like</button>
+    </form>
+
   <% if comment.author == @user %>
     <form action="/comments/<%=comment.id%>/edit" method="POST">
       <input type="hidden" name="_method" value="PUT">
       <input type="hidden" name="comments" value="comments">
       <div class="form-row">
         <div class="form-group">
-          <label for="exampleFormControlTextarea1">You Wrote:</label>
+          <label for="comment_edit">You Wrote:</label>
           <textarea class="form-control" name="content" rows="3" placeholder="<%= comment.content%>"></textarea>
         </div>
       </div>
@@ -27,9 +29,10 @@
     </form>
   <% else %>
     <form action="/comments/<%=comment.id%>/new" method="POST">
+      <input type="hidden" name="comment_id" value="<%= comment.id %>">
       <div class="form-row">
         <div class="form-group">
-          <label for="exampleFormControlTextarea1">Add Comment:</label>
+          <label for="reply">Add Reply:</label>
           <textarea class="form-control" name="content" rows="3" ></textarea>
         </div>
       </div>

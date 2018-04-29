@@ -1,6 +1,7 @@
 require "sinatra"
 require "sinatra/activerecord"
 require "shotgun"
+require 'sinatra/partial'
 
 require_relative './models/user'
 require_relative './models/post'
@@ -12,9 +13,10 @@ require_relative './models/like'
 configure do
     enable :sessions unless test?
     set :session_secret, "secret"
+    set :partial_template_engine, :erb
 end
 
-set :database, {adapter: 'postgresql', database: 'blog'}
+set :database, {adapter: 'postgresql', database: 'survival'}
 
 get '/' do 
   @admin = User.where(admin: true).first
@@ -104,7 +106,7 @@ end
 
 get '/comments' do
   @user = User.find(session[:id]) if session[:id]
-  @comments = Comment.order("updated_at").last(20).reverse
+  @comments = Comment.hash_tree(limit_depth: 20)
   erb :'comments/index'
 end 
 
@@ -119,11 +121,23 @@ post '/comments/:id/like' do
   redirect "/comments"
 end
 
+delete '/comments/:id/like' do 
+  @user = User.find(session[:id]) if session[:id]
+  @like = Like.find_by(likable_type: "Comment", likable_id: params[:id], user_id: @user.id)
+  @like.destroy
+  redirect "/comments"
+end
+
 post '/comments/:id/new' do
   @user = User.find(session[:id]) if session[:id] 
   if @user 
-    @commentable = Comment.find(params[:id])
-    @comment = @commentable.comments.new(content: params[:content], author: @user)
+    if params[:comment_id] 
+      @commentable = Comment.find(params[:comment_id])
+      @comment = @commentable.children.new(content: params[:content], author: @user)
+    elsif params[:post_id]
+      @commentable = Post.find(params[:post_id])
+      @comment = @commentable.children.new(content: params[:content], author: @user)
+    end
   end 
   if @comment.save
     @msg = "Saved"
@@ -201,12 +215,16 @@ post "/posts/:id/comments/:comment_id/like" do
   redirect back
 end
 
-get '/tags' do 
+
+
+get '/tags' do
+  @user = User.find(session[:id]) if session[:id] 
   @tags = Tag.all
   erb :'tags/index'
 end
 
-get '/tags/:id' do 
+get '/tags/:id' do
+  @user = User.find(session[:id]) if session[:id] 
   @tag = Tag.find(params[:id])
   erb :'tags/show'
 end  

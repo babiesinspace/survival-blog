@@ -1,0 +1,19 @@
+<div class="list-group">
+  <a href="/posts/<%= comment.ancestor.id%>" class="list-group-item list-group-item-action flex-column align-items-start">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1"><%= comment.author.handle %></h5>
+      <small class="text-muted"><%= comment.updated_at %></small>
+    </div>
+    <p class="mb-1"><%= comment.content %></p>
+    <small class="text-muted">
+    <form action="/posts/<%= comment.ancestor.id %>/comments/<%= comment.id %>/like" method="POST">
+      <input type="hidden" name="home" value="home">
+      <input type="hidden" name="likable_id" value=<%= comment.id %>>
+      <span class="badge badge-primary badge-pill"><%= comment.likes.count %>  </span>  <button type="submit">Like</button>
+    </form>
+    </small>  
+  </a>
+  <% if comment.replies.any? %>
+    <%= partial(:comment, :collection => comment.replies) %>
+  <% end %>
+</div>

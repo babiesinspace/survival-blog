@@ -13,12 +13,12 @@ require 'bcrypt'
 
 # 5.times do |e|
 # 	Post.all.each do |post|
-# 		post.comments.create(content: Faker::Seinfeld.quote, author: User.find(rand(2..11)))
+# 		post.comments.create(ancestor: post, content: Faker::Seinfeld.quote, author: User.find(rand(2..11)))
 # 	end 
 # end
 
 # Comment.all.each do |comment|
-# 	comment.comments.create(content: Faker::Seinfeld.quote, author: User.find(rand(1..11)))
+# 	comment.replies.create(ancestor: comment.ancestor, content: Faker::Seinfeld.quote, author: User.find(rand(1..11)))
 # end 
 
 #REWRITE TO CREATE RANDOM NUMBER OF LIKES

@@ -1,9 +1,10 @@
 class Comment < ActiveRecord::Base
-	belongs_to :author, class_name: 'User',
+  belongs_to :author, class_name: 'User',
                       foreign_key: "user_id"
-	belongs_to :commentable, polymorphic: true
- 	belongs_to :post
-  belongs_to :comment
-  has_many :comments, as: :commentable
  	has_many :likes, as: :likable
+  belongs_to :ancestor, class_name: 'Post',
+                      foreign_key: "post_id", 
+                      dependent: :destroy
+  belongs_to :parent,  class_name: "Comment" #-> requires "parent_id" column
+  has_many   :replies, class_name: "Comment", foreign_key: :parent_id, dependent: :destroy
 end 
