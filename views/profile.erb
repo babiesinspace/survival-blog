@@ -2,21 +2,7 @@
   <div class="container">
     <h1>Welcome, <%= @user.handle %> </h1>
 
-    <% @user.comments.each do |comment| %>
-    <ul>
-      <% if comment.commentable_type ==  'Post' %>
-        <h3><%= comment.commentable.title %></h3>
-      <% else %>
-        <p class="text-muted">Added by <strong><%= comment.author.handle %></strong> on <%= comment.created_at %></p>
 
-        <blockquote>
-          <p><%= comment.content %></p>
-        </blockquote>
-      <% end %>
-
-    </ul>
-      <% end %>
-  </div>
 
   <% @user.comments.each do |comment| %>
     <div class="well">
@@ -30,7 +16,8 @@
     </div>
   <% end %>
 
-  <a href="/users/profile/edit"><button>Manage Your Profile</button></a>
+    <a href="/users/profile/edit"><button>Manage Your Profile</button></a>
+  </div>
 <% else %>
   <div class="container">
     <h1>You're not signed in!</h1>
