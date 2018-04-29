@@ -30,7 +30,9 @@
       <button type="submit">Delete</button>
     </form>
   <% end %>
-  <%= partial(:comment, :collection => @post.comments) %>
+  <div class="list-group">
+    <%= partial(:comment, :collection => @post.comments) %>
+  </div>
   <% if !@user %>
     <p><em>Sign in or register to leave a comment!</em></p>
   <% end %>

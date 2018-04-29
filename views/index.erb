@@ -14,8 +14,10 @@
           <span class="badge badge-primary badge-pill"><%= post.likes.count %>  </span>  <button type="submit">Like</button>
         </form>
       </small>  
-    </a>  
-    <%= partial(:comment, :collection => post.comments) %>
+    </a>
+    <div class="list-group">  
+      <%= partial(:comment, :collection => post.comments ) %>
+    </div>
   <% end %>
 </div>
 
