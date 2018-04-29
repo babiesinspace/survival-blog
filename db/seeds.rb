@@ -18,7 +18,7 @@ require 'bcrypt'
 # end
 
 # Comment.all.each do |comment|
-# 	comment.replies.create(ancestor: comment.ancestor, content: Faker::Seinfeld.quote, author: User.find(rand(1..11)))
+# 	comment.replies.create(parent: comment, ancestor: comment.ancestor, content: Faker::Seinfeld.quote, author: User.find(rand(1..11)))
 # end 
 
 #REWRITE TO CREATE RANDOM NUMBER OF LIKES

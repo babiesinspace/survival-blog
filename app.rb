@@ -193,7 +193,7 @@ post '/posts/:id/comments/new' do
   @user = User.find(session[:id]) if session[:id]
   if @user 
     @commentable = Post.find(params[:id])
-    @comment = @commentable.comments.new(content: params[:content], author: @user)
+    @comment = @commentable.replies.new(content: params[:content], author: @user)
     if @comment.save
       @msg = "Saved"
     else
