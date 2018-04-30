@@ -47,7 +47,7 @@ post '/register' do
   else
     # check this
     @errors = @user.errors
-    redirect "/failure"
+    redirect "/"
   end
 
 end
@@ -62,7 +62,7 @@ post '/login' do
   else
     # check this
     @errors = @user.errors
-    redirect "/failure"
+    redirect "/"
   end
 
 end
@@ -170,7 +170,8 @@ delete '/comments/:id' do
   redirect ("/")
 end  
 
-get '/posts/:id' do 
+get '/posts/:id' do
+  @tags = Tag.all 
   @user = User.find(session[:id]) if session[:id]
   params[:id] ? id = params[:id] : id = params[:post]
   @post = Post.find(id)
@@ -217,7 +218,26 @@ post "/posts/:id/comments/:comment_id/like" do
   redirect back
 end
 
+post "/posts/:id/tag" do 
+  post = Post.find(params[:id])
+  if params[:tag]
+    tag = Tag.find(params[:tag])
+    post.tags << tag
+  else
+    post.tags.create(name: params[:new_tag]) if params[:new_tag]
+  end
+  redirect ("/posts/#{params[:id]}")
+end
 
+delete "/posts/:id/tag" do 
+  post = Post.find(params[:id])
+  tag = post.tags.find(params[:tag])
+  post.tags.delete(tag)
+  if !tag.posts.any?
+    tag.destroy
+  end 
+  redirect ("/posts/#{params[:id]}")
+end  
 
 get '/tags' do
   @user = User.find(session[:id]) if session[:id] 

@@ -1,0 +1,32 @@
+<form action="/posts/<%=@post.id%>/tag" method="POST">
+  <div class="form-group">
+    <label for="tags">Add</label>
+    <select class="form-control" name="tag">
+      <% @tags.each do |tag| %>
+        <option value="<%= tag.id %>" ><%= tag.name %></option>
+      <% end %>
+    </select>
+  </div>    
+  <div class="form-group">
+    <input class="form-control" type="text" name="new_tag" placeholder="Tag Name"></input>
+  </div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-primary">Tag</button>
+  </div>
+
+</form>
+
+<form action="/posts/<%= @post.id %>/tag" method="POST">
+  <input type="hidden" name="_method" value="DELETE">
+  <div class="form-group">
+    <label for="tags">Remove</label>
+    <select class="form-control" name="tag">
+      <% @post.tags.each do |tag| %>
+        <option value="<%= tag.id %>" ><%= tag.name %></option>
+      <% end %>
+    </select>
+  </div>  
+  <div class="form-group">
+    <button type="submit" class="btn btn-primary">Delete</button>
+  </div>
+</form>

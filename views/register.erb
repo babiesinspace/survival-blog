@@ -1,4 +1,7 @@
 <div class="container">
+  <% if @msg %>
+    <h3><%= @msg %></h3>
+  <% end %>
   <form action="/register" method="POST">
     <div class="form-row">
 
