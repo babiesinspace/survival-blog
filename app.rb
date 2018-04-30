@@ -47,7 +47,7 @@ post '/register' do
   else
     # check this
     @errors = @user.errors
-    redirect "/failure"
+    redirect "/"
   end
 
 end
@@ -62,7 +62,7 @@ post '/login' do
   else
     # check this
     @errors = @user.errors
-    redirect "/failure"
+    redirect "/"
   end
 
 end
