@@ -3,19 +3,11 @@
     <h1>Welcome, <%= @user.handle %> </h1>
 
 
-
-  <% @user.comments.each do |comment| %>
-    <div class="well">
-
-      <p class="text-muted">Added by <strong><%= comment.author.handle %></strong> on
-        <%= comment.created_at %></p>
-
-      <blockquote>
-        <p><%= comment.content %></p>
-      </blockquote>
-    </div>
+  <% if @user.comments.any? %>
+    <%= partial(:comment, :collection => @user.comments) %>
+  <% else %>
+    <h2>Leave some comments to see them here!</h2>
   <% end %>
-
     <a href="/users/profile/edit"><button>Manage Your Profile</button></a>
   </div>
 <% else %>
